@@ -29,10 +29,17 @@ jobs:
       run: ./gradlew build
 
     - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        image: azrillana/private-images
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        # Extract branch name and commit ID
+        BRANCH_NAME=$(echo "${GITHUB_REF}" | sed -e "s/refs\/heads\///")
+        COMMIT_ID=$(git rev-parse --short=7 HEAD)
+        # Log in to DockerHub
+        echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+        # Build and tag the Docker image
+        docker build -t "${DOCKERHUB_USERNAME}/private-images:${BRANCH_NAME}-${COMMIT_ID}" .
+        # Push the image to DockerHub
+        docker push "${DOCKERHUB_USERNAME}/private-images:${BRANCH_NAME}-${COMMIT_ID}"
          
