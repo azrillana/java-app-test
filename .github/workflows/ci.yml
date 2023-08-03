@@ -54,7 +54,6 @@ jobs:
       run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG_VIPER }} | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
     - name: Use context k8s cluster
       run: kubectl config use-context viper-cluster
     - name: Run Deployment
