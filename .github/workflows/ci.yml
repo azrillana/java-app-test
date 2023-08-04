@@ -56,9 +56,9 @@ jobs:
     - name: Replace Token
       uses: cschleiden/replace-tokens@v1
       with:
-        files: '["deployment/deployment-java-app.yaml"]'
-        tokenPrefix: __
-        tokenSuffix: __
+        tokenPrefix: '__'
+        tokenSuffix: '__'
+        files: '["deployment/*.yaml"]'
       env:
         IMAGE_NAME: ${{ env.IMAGE_NAME }}
 
