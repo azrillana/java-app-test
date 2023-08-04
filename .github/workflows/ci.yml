@@ -53,6 +53,12 @@ jobs:
 
     steps:
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check File on Folder
+      run: ls -la deployment
+
     - name: Replace Token
       uses: cschleiden/replace-tokens@v1
       with:
@@ -61,10 +67,6 @@ jobs:
         files: '["deployment/*.yaml"]'
       env:
         IMAGE_NAME: ${{ env.IMAGE_NAME }}
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Create Kubeconfig
       run: |
         mkdir ${HOME}/.kube
