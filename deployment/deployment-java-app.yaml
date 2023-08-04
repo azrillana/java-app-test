@@ -21,7 +21,7 @@ spec:
       - env:
         # - name: BuildVersionId
         #   value: 0.111
-        image: azrillana/private-images:${{ env.BRANCH_NAME }}-${{ env.COMMIT_ID }}
+        image: azrillana/private-images:#{IMAGE_NAME}#
         name: java-app
         ports:
         - containerPort: 8080

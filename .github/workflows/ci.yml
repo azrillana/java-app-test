@@ -40,6 +40,15 @@ jobs:
         docker build -t "${DOCKERHUB_USERNAME}/private-images:${BRANCH_NAME}-${COMMIT_ID}" .
         # Push the image to DockerHub
         docker push "${DOCKERHUB_USERNAME}/private-images:${BRANCH_NAME}-${COMMIT_ID}"
+
+    - name: Replace Token
+      uses: cschleiden/replace-tokens@v1
+      with:
+        files: '["deployment/*.yaml"]'
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+      env:
+        IMAGE_NAME: ${BRANCH_NAME}-${COMMIT_ID}
   
   deploy-to-kubernetes:
 
@@ -50,12 +59,16 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
     - name: Create Kubeconfig
       run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG_VIPER }} | base64 --decode > ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
+
     - name: Use context k8s cluster
       run: kubectl config use-context viper-cluster
+
     - name: Run Deployment
       run: kubectl apply -f deployment/
          
