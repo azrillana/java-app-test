@@ -21,7 +21,7 @@ spec:
       - env:
         # - name: BuildVersionId
         #   value: 0.111
-        image: azrillana/private-images:#{IMAGE_NAME}#
+        image: azrillana/private-images:__IMAGE_NAME__
         name: java-app
         ports:
         - containerPort: 8080
